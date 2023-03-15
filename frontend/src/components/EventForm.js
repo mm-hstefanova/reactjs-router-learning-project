@@ -1,4 +1,9 @@
-import { useNavigate, useNavigation, Form } from 'react-router-dom';
+import {
+  useNavigate,
+  useNavigation,
+  useActionData,
+  Form,
+} from 'react-router-dom';
 
 import classes from './EventForm.module.css';
 
@@ -6,6 +11,7 @@ function EventForm({ method, event }) {
   const navigate = useNavigate();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === 'submitting';
+  const data = useActionData();
 
   function cancelHandler() {
     navigate('..');
@@ -13,6 +19,13 @@ function EventForm({ method, event }) {
 
   return (
     <Form method='post' className={classes.form}>
+      {data && data.errors && (
+        <ul>
+          {Object.values(data.errors).map((err) => (
+            <li key={err}>{err}</li>
+          ))}
+        </ul>
+      )}
       <p>
         <label htmlFor='title'>Title</label>
         <input
